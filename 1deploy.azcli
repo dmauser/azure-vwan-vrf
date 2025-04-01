@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# Pre-Requisite
-az extension add --name virtual-wan 
-# or update
-az extension update --name virtual-wan
-
 # Parameters (make changes based on your requirements)
 region1=westus3
 region2=westus3
@@ -23,6 +18,17 @@ vmsize=Standard_DS1_v2
 
 #Variables
 mypip=$(curl -4 ifconfig.io -s)
+
+# Pre-Requisites
+# Check if virtual wan extension is installed if not install it
+if ! az extension list | grep -q virtual-wan; then
+    echo "virtual-wan extension is not installed, installing it now..."
+    az extension add --name virtual-wan --only-show-errors
+fi
+
+# Adding script starting time and finish time
+start=`date +%s`
+echo "Script started at $(date)"
 
 # create rg
 az group create -n $rg -l $region1 --output none
@@ -482,3 +488,8 @@ az network vpn-connection create -n branch2-to-$hub2name-gw2 -g $rg -l $region2 
 # Note: at this point you can test connectivity and the expected behavior is to have any-to-any connectivity using the default route table (by design vWAN behavior).
 # Use instruction of validation section below if you want to test that connectivity.
 echo Deployment has finished
+# Add script ending time but hours, minutes and seconds
+end=`date +%s`
+runtime=$((end-start))
+echo "Script finished at $(date)"
+echo "Total script execution time: $(($runtime / 3600)) hours $((($runtime / 60) % 60)) minutes and $(($runtime % 60)) seconds."
