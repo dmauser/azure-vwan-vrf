@@ -31,9 +31,8 @@ chmod +xr deploy.sh
 
 2. Validation before enabling labels (any to any connectivity).
 
-2.1 Validate connectivity between all VMs.
-
-2.2 Review the effective routes for few VMs.
+ - 2.1 Validate connectivity between all VMs.
+ - 2.2 Review the effective routes for few VMs.
 
 3. Configure labels to segregate traffic between production and development environments as well as between vendor 1 and vendor 2.
 
