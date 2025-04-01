@@ -60,9 +60,14 @@ To achieve this, we will use the following labels:
 | hub4-fw-vnetconn | Hub4 Vendor2 | vendor2, prod, dev | Hub4 can advertise its routes to labels Vendor1 and Vendor 2 |
 | dmz-vnetconn | Hub1 Prod | prod | DMZ can advertise its routes to label Prod |
 
-4. Validation after labels for network isolation.
-
-
-
 ### Network Diagram after applying labels
 ![](/media/diagram-label.png)
+
+4. Validation after labels for network isolation.
+
+ - 4.1 Validate connectivity between all VMs.
+ - 4.2 Review the effective routes for few VMs.
+
+### Conclusion
+
+In this lab, you have successfully deployed a Virtual WAN with labels to achieve network isolation. You have learned how to configure and validate the deployment, ensuring that traffic segregation is effectively implemented between different environments and vendors.
