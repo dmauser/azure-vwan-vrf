@@ -1,4 +1,4 @@
-# LAB: Virtual WAN deployment using VRFs
+# LAB: Virtual WAN deployment using network isolation (VRF) with labels
 
 This lab provides a step-by-step guide to deploying a Virtual WAN with labels, enabling traffic segregation between third-party vendors and production or development environments. By following this lab, you will learn how to configure and validate network isolation effectively.
 
