@@ -104,12 +104,12 @@ az network vnet-gateway create -n branch2-vpngw --public-ip-addresses branch2-vp
 
 echo Creating Spoke VMs...
 # create a VM in each connected spoke
-az vm create -n sd-wan-prodVM  -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region1 --subnet main --vnet-name sd-wan-prod --admin-username $username --admin-password $password --nsg "" --no-wait
-az vm create -n sd-wan-devVM  -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region2 --subnet main --vnet-name sd-wan-dev --admin-username $username --admin-password $password --nsg "" --no-wait
-az vm create -n hub3-fw-vnetVM  -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region3 --subnet main --vnet-name hub3-fw-vnet --admin-username $username --admin-password $password --nsg "" --no-wait
-az vm create -n hub3-spoke-vnetVM  -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region3 --subnet main --vnet-name hub3-spoke-vnet --admin-username $username --admin-password $password --nsg "" --no-wait
-az vm create -n hub4-fw-vnetVM  -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region4 --subnet main --vnet-name hub4-fw-vnet --admin-username $username --admin-password $password --nsg "" --no-wait
-az vm create -n hub4-spoke-vnetVM  -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region4 --subnet main --vnet-name hub4-spoke-vnet --admin-username $username --admin-password $password --nsg "" --no-wait
+az vm create -n sd-wan-prod -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region1 --subnet main --vnet-name sd-wan-prod --admin-username $username --admin-password $password --nsg "" --no-wait
+az vm create -n sd-wan-dev -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region2 --subnet main --vnet-name sd-wan-dev --admin-username $username --admin-password $password --nsg "" --no-wait
+az vm create -n hub3-fw-nva -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region3 --subnet main --vnet-name hub3-fw-vnet --admin-username $username --admin-password $password --nsg "" --no-wait
+az vm create -n hub3-spoke -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region3 --subnet main --vnet-name hub3-spoke-vnet --admin-username $username --admin-password $password --nsg "" --no-wait
+az vm create -n hub4-fw-nva -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region4 --subnet main --vnet-name hub4-fw-vnet --admin-username $username --admin-password $password --nsg "" --no-wait
+az vm create -n hub4-spoke -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region4 --subnet main --vnet-name hub4-spoke-vnet --admin-username $username --admin-password $password --nsg "" --no-wait
 
 echo "Create DMZ vnet..."
 # Create DMZ vnet
@@ -289,19 +289,19 @@ az network vnet peering create -g $rg -n hub4-fw-vnet-to-dmz-vnet --vnet-name hu
 az network vnet peering create -g $rg -n dmz-vnet-to-hub4-fw-vnet --vnet-name dmz-vnet --allow-vnet-access --allow-forwarded-traffic --remote-vnet $(az network vnet show -g $rg -n hub4-fw-vnet --query id --out tsv) --output none
 
 ######### Enable FW-vnet as NVAs ###########
-# Turning hub3-fw-vnetVM into a router
-echo Turning hub3-fw-vnetVM into a router...
+# Turning hub3-fw-nva into a router
+echo Turning hub3-fw-nva into a router...
 ### Enable IP Forwarded on the az-hub-lxvm nic
-az network nic update --resource-group $rg --name hub3-fw-vnetVMVMNic --ip-forwarding true -o none --no-wait
+az network nic update --resource-group $rg --name hub3-fw-nvaVMNic --ip-forwarding true -o none --no-wait
 ### az run command on az-hub-lxvm using uri: https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh
-az vm run-command invoke -g $rg -n hub3-fw-vnetVM --command-id RunShellScript --scripts "curl -s https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh | bash" -o none --no-wait
+az vm run-command invoke -g $rg -n hub3-fw-nva --command-id RunShellScript --scripts "curl -s https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh | bash" -o none --no-wait
 
-# Turning hub4-fw-vnetVM into a router
-echo Turning hub4-fw-vnetVM into a router...
+# Turning hub4-fw-nva into a router
+echo Turning hub4-fw-nva into a router...
 ### Enable IP Forwarded on the az-hub-lxvm nic
-az network nic update --resource-group $rg --name hub4-fw-vnetVMVMNic --ip-forwarding true -o none --no-wait
+az network nic update --resource-group $rg --name hub4-fw-nvaVMNic --ip-forwarding true -o none --no-wait
 ### az run command on az-hub-lxvm using uri: https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh
-az vm run-command invoke -g $rg -n hub4-fw-vnetVM --command-id RunShellScript --scripts "curl -s https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh | bash" -o none --no-wait
+az vm run-command invoke -g $rg -n hub4-fw-nva --command-id RunShellScript --scripts "curl -s https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh | bash" -o none --no-wait
 
 # Turning dmz-vm into a router
 echo Turning dmz-vm into a router...
@@ -314,8 +314,8 @@ az vm run-command invoke -g $rg -n dmz-vm --command-id RunShellScript --scripts 
 echo creating static route to their respective NVAs...
 #hub3-fw-vnet vnet connection
 spokevnet=hub3-fw-vnet
-# List Private IP of hub3-fw-vnetVMVMNic
-hub3nvaip=$(az network nic show -g $rg -n hub3-fw-vnetVMVMNic --query ipConfigurations[0].privateIPAddress -o tsv)
+# List Private IP of hub3-fw-nvaVMNic
+hub3nvaip=$(az network nic show -g $rg -n hub3-fw-nvaVMNic --query ipConfigurations[0].privateIPAddress -o tsv)
 vnetid=$(az network vnet show -n $spokevnet -g $rg --query id -o tsv)
 dstcidr=172.16.4.0/24
 conn=hub3-fw-vnetconn
@@ -332,8 +332,8 @@ az rest --method put --uri https://management.azure.com/subscriptions/$subid/res
 
 #hub4-fw-vnet vnet connection
 spokevnet=hub4-fw-vnet
-# List Private IP of hub4-fw-vnetVMVMNic
-hub4nvaip=$(az network nic show -g $rg -n hub4-fw-vnetVMVMNic --query ipConfigurations[0].privateIPAddress -o tsv)
+# List Private IP of hub4-fw-nvaVMNic
+hub4nvaip=$(az network nic show -g $rg -n hub4-fw-nvaVMNic --query ipConfigurations[0].privateIPAddress -o tsv)
 vnetid=$(az network vnet show -n $spokevnet -g $rg --query id -o tsv)
 dstcidr=172.16.6.0/24
 conn=hub4-fw-vnetconn
