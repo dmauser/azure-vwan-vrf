@@ -12,8 +12,20 @@ This lab demonstrates how to deploy a Virtual WAN using labels to segregate traf
 
 ### Lab Steps
 
-Using Azure CLI deploy run the following command to deploy the lab:
+1. Deploy base lab resources using the following command:
 
 ```bash
-curl -s https://raw.githubusercontent.com/dmauser/azure-virtualwan/main/svh-ri-inter-region/svhri-inter-deploy.azcli | bash
+curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/1deploy.azcli | bash
 ```
+
+2. Validation before enabling labels (any to any connectivity).
+
+2.1 Validate connectivity between all VMs.
+
+2.2 Review the effective routes for few VMs.
+
+3. Configure labels to segregate traffic between production and development environments as well as between vendor 1 and vendor 2.
+
+```bash
+
+4. Validation before after labels for network isolation.
