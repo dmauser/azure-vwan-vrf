@@ -33,7 +33,7 @@ echo "Script started at $(date)"
 # create rg
 az group create -n $rg -l $region1 --output none
 
-echo Creating vwan and both hubs...
+echo Creating vwan and vhubs...
 # create virtual wan
 az network vwan create -g $rg -n $vwanname --branch-to-branch-traffic true --location $region1 --type Standard --output none
 az network vhub create -g $rg --name $hub1name --address-prefix 192.168.1.0/24 --vwan $vwanname --location $region1 --sku Standard --no-wait
@@ -41,7 +41,7 @@ az network vhub create -g $rg --name $hub2name --address-prefix 192.168.2.0/24 -
 az network vhub create -g $rg --name $hub3name --address-prefix 192.168.3.0/24 --vwan $vwanname --location $region3 --sku Standard --no-wait
 az network vhub create -g $rg --name $hub4name --address-prefix 192.168.4.0/24 --vwan $vwanname --location $region3 --sku Standard --no-wait
 
-echo Creating branches VNETs...
+echo Creating branches vNETs...
 # create location1 branch virtual network
 az network vnet create --address-prefixes 10.110.0.0/16 -n branch1 -g $rg -l $region1 --subnet-name main --subnet-prefixes 10.110.0.0/24 --output none
 
