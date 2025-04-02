@@ -9,9 +9,19 @@ This lab provides a step-by-step guide to deploying a Virtual WAN with labels, e
       - [Azure Virtual WAN Overview](https://learn.microsoft.com/en-us/azure/virtual-wan/virtual-wan-about)
       - [About virtual Hub routing](https://learn.microsoft.com/en-us/azure/virtual-wan/about-virtual-hub-routing)
 
-### Networking topology
+### Network topology
 
 ![](./media/diagram.png)
+
+The topology consists of the following components of four environments:
+- **Hub1**: Production environment.
+- **Hub2**: Development environment.
+- **SD-WAN**: Two SD-WAN vNets (one for production another for development) connected to the Virtual WAN via vNET connections. Note that the SD-WAN devices are not part of the lab and are not configured in this deployment. They are only used to illustrate the topology.
+- **Hub3**: Vendor 1 environment with a firewall.
+- **Hub4**: Vendor 2 environment with a firewall.
+- **Spoke**: A spoke vNet connected to Hub3 (Vendor1) and another spoke connected to Hub4 (Vendor 2). 
+- **On-premises**: Two branches connected to the Virtual WAN via site-to-site VPN connections. One represents the production environment, and the other represents the development environment.
+- **DMZ**: A DMZ vNet connected to the production environment but peered with each vendor hub to allow Internet access.
 
 ### Lab Steps
 
@@ -30,6 +40,8 @@ chmod +xr deploy.sh
 ```
 
 2. Validation before enabling labels (any to any connectivity).
+
+At this point, you have deployed the Virtual WAN with all the components. The next step is to validate the deployment before applying labels for network isolation. The expectation is that all VMs can communicate with each other.
 
  - 2.1 Validate connectivity between all VMs.
  - 2.2 Review the effective routes for few VMs.
