@@ -115,10 +115,10 @@ az vm create -n hub4-fw-nva -g $rg --image Ubuntu2204 --public-ip-sku Standard -
 
 echo "Creating DMZ vnet..."
 # Create DMZ vnet
-az network vnet create --address-prefixes 172.16.100.0/24 -n dmz-vnet -g $rg -l $region1 --subnet-name main --subnet-prefixes 172.16.100.0/24 --output none
+az network vnet create --address-prefixes 172.16.100.0/24 -n dmz-vnet -g $rg -l $region1 --subnet-name main --subnet-prefixes 172.16.100.0/27 --output none
 echo "Create Ubuntu VM in DMZ vnet..."
 # Create a VM in the DMZ vnet
-az vm create -n dmz-vm -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region1 --subnet main --vnet-name dmz-vnet --admin-username $username --admin-password $password --nsg "" --no-wait
+az vm create -n dmz-nva -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region1 --subnet main --vnet-name dmz-vnet --admin-username $username --admin-password $password --nsg "" --no-wait
 
 # Build a loop script to wait for VMs to be created
 echo "Waiting for all VMs to be created..."
@@ -304,12 +304,12 @@ az network nic update --resource-group $rg --name hub4-fw-nvaVMNic --ip-forwardi
 ### az run command on az-hub-lxvm using uri: https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh
 az vm run-command invoke -g $rg -n hub4-fw-nva --command-id RunShellScript --scripts "curl -s https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh | bash" -o none --no-wait
 
-# Turning dmz-vm into a router
-echo Turning dmz-vm into a router...
-### Enable IP Forwarded on the dmz-vm nic
-az network nic update --resource-group $rg --name dmz-vmVMNic --ip-forwarding true -o none --no-wait
-### az run command on dmz-vm using uri: https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh
-az vm run-command invoke -g $rg -n dmz-vm --command-id RunShellScript --scripts "curl -s https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh | bash" -o none --no-wait
+# Turning dmz-nva into a router
+echo Turning dmz-nva into a router...
+### Enable IP Forwarded on the dmz-nva nic
+az network nic update --resource-group $rg --name dmz-nvaVMNic --ip-forwarding true -o none --no-wait
+### az run command on dmz-nva using uri: https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh
+az vm run-command invoke -g $rg -n dmz-nva --command-id RunShellScript --scripts "curl -s https://raw.githubusercontent.com/dmauser/AzureVM-Router/refs/heads/master/linuxrouter.sh | bash" -o none --no-wait
 
 ######### Static Route Propagation ###########
 echo creating static route to their respective NVAs...
@@ -362,7 +362,7 @@ az network vnet subnet update --vnet-name hub4-spoke-vnet -g $rg --name main --r
 
 ########## For traffic indirect Hub NVAs to fw-dmzvm ###########
 # Get private IP from fw-dmzvm
-dmzvmnicip=$(az network nic show -g $rg -n dmz-vmVMNic --query ipConfigurations[0].privateIPAddress -o tsv)
+dmzvmnicip=$(az network nic show -g $rg -n dmz-nvaVMNic --query ipConfigurations[0].privateIPAddress -o tsv)
 
 # Create UDR from hub3-fw-vnet to fw-dmzvm
 az network route-table create -g $rg -n hub3-fw-vnet-rt --location $region3 --output none
@@ -494,3 +494,5 @@ end=`date +%s`
 runtime=$((end-start))
 echo "Script finished at $(date)"
 echo "Total script execution time: $(($runtime / 3600)) hours $((($runtime / 60) % 60)) minutes and $(($runtime % 60)) seconds."
+
+
