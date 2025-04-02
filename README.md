@@ -52,21 +52,24 @@ To achieve this, we will use the following labels:
 
 | Connection | Connected to vHub | Propagation Label | Description |
 |------------|-------------------|-------------------|-------------|
-| sd-wan-prodconn | Hub1 Prod | prod, vendor1, vendor2 | sd-wan-prod vNET can advertise its routes to labels Prod, Vendor1 and Vendor 2 |
-| connection-site-branch1 | Hub1 Prod | prod, vendor1, vendor2 | On-premises can advertise its routes to labels Prod, Vendor1 and Vendor 2 |
-| sd-wan-devconn | Hub2 Dev | dev, vendor1, vendor2 | sd-wan-dev vNET can advertise its routes to labels Dev, Vendor1 and Vendor 2 |
-| connection-site-branch2 | Hub2 Dev | dev, vendor1, vendor2 | On-premises can advertise its routes to labels Dev, Vendor1 and Vendor 2 |
-| hub3-fw-vnetconn | Hub3 Vendor1 | vendor1, prod, dev | Hub3 can advertise its routes to labels Vendor1 and Vendor 2 |
-| hub4-fw-vnetconn | Hub4 Vendor2 | vendor2, prod, dev | Hub4 can advertise its routes to labels Vendor1 and Vendor 2 |
-| dmz-vnetconn | Hub1 Prod | prod | DMZ can advertise its routes to label Prod |
+| sd-wan-prodconn | Hub1 Prod | prod, vendor1, vendor2 | sd-wan-prod vNET advertises its routes to labels Prod, Vendor1 and Vendor 2 |
+| connection-site-branch1 | Hub1 Prod | prod, vendor1, vendor2 | On-premises advertises its routes to labels Prod, Vendor1 and Vendor 2 |
+| sd-wan-devconn | Hub2 Dev | dev, vendor1, vendor2 | sd-wan-dev vNET advertise its routes to labels Dev, Vendor1 and Vendor 2 |
+| connection-site-branch2 | Hub2 Dev | dev, vendor1, vendor2 | On-premises advertises its routes to labels Dev, Vendor1 and Vendor 2 |
+| hub3-fw-vnetconn | Hub3 Vendor1 | vendor1, prod, dev | Hub3 advertises its routes to labels Vendor1 and Vendor 2 |
+| hub4-fw-vnetconn | Hub4 Vendor2 | vendor2, prod, dev | Hub4 advertises its routes to labels Vendor1 and Vendor 2 |
+| dmz-vnetconn | Hub1 Prod | prod | DMZ vnet advertises its routes to label Prod |
 
-### Network Diagram after applying labels
+### Network Diagram after adjusting vnet connections propagation
+
+It is important to note that after create the lables and adjust the vnet connections propagation, the effective routes will be different from the ones before. The following diagram illustrates the effective routes after the labels have been applied:
+
 ![](/media/diagram-label.png)
 
 4. Validation after labels for network isolation.
 
  - 4.1 Validate connectivity between all VMs.
- - 4.2 Review the effective routes for few VMs.
+ - 4.2 Review the effective routes for the VMs.
 
 ### Conclusion
 
