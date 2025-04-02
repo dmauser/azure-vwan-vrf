@@ -17,8 +17,8 @@ The topology consists of the following components of four environments:
 - **Hub1**: Production environment.
 - **Hub2**: Development environment.
 - **SD-WAN**: Two SD-WAN vNets (one for production another for development) connected to the Virtual WAN via vNET connections. Note that the SD-WAN devices are not part of the lab and are not configured in this deployment. They are only used to illustrate the topology.
-- **Hub3**: Vendor 1 environment with a firewall.
-- **Hub4**: Vendor 2 environment with a firewall.
+- **Hub3**: vHub dedicated to the Vendor1 environment.
+- **Hub4**: vHub dedicated to the Vendor2 environment.
 - **Fw-vnet**: A fw-vnet is connected to Hub3 (Vendor1) and another connected to Hub4 (Vendor 2). The goal of the fw-vnet is have an Firewall with the goal of perform east/west traffic inspection. The firewall is not part of the lab and is not configured in this deployment. For the lab we use a Linux VM with routing enabled to simulate the firewall. You can replace it with an Azure Firewall or any other firewall solution of your choice.
 - **spoke**: Two spoke vNets connected to the Fw-vnet for each vendor. That vNnet hosts the workloads for each vendor. - **On-premises**: Two branches connected to the Virtual WAN via site-to-site VPN connections. One represents the production environment, and the other represents the development environment.
 - **DMZ**: A DMZ vNet connected to the production environment but peered with each vendor hub to allow Internet access. NVA present in the fw-vnet has the default route set to the DMZ NVA. For the lab we use a Linux VM with routing enabled to simulate the firewall at the DMZ vnet. You can replace it with an Azure Firewall or any other firewall solution of your choice.
@@ -27,7 +27,7 @@ The topology consists of the following components of four environments:
 
 - The lab is designed to be run in a single Azure region (East US) for simplicity. However, you can modify the deployment script to use different regions if needed.
 - The lab uses Azure CLI commands to deploy resources. Ensure you have the Azure CLI installed and configured on your machine or use the Azure Cloud Shell.
-- Inspection is done by the firewall in the 
+- The inspection is done outside of the Virtual WAN hubs. That is necessary because turning Virtual WAN Hub as secured remove the ability to use labels. Therefore, the inspection is done in each vendor fw-vnet.
 
 
 ### Lab Steps
