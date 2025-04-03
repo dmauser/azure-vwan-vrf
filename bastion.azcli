@@ -1,11 +1,27 @@
-rg=lab-vwan-3p
+# Parameters (make changes based on your requirements)
+rg=lab-vwan-3p 
+vwanname=vwan-3p
+hub1name=hub1
+hub2name=hub2
+hub3name=hub3
+hub4name=hub4
+
+# Variables
+region1=$(az network vhub show -n $hub1name -g $rg --query location -o tsv)
+region2=$(az network vhub show -n $hub2name -g $rg --query location -o tsv)
+region3=$(az network vhub show -n $hub3name -g $rg --query location -o tsv)
+region4=$(az network vhub show -n $hub4name -g $rg --query location -o tsv)
 bastionName="dmz-vnet-bastion"
 username=azureuser
 password="Msft123Msft123"
 
 ### Deploy Bastion ###
-
-
+# Create a public IP for the Bastion host
+az network public-ip create --name dmz-vnet-bastion-pip --resource-group $rg --location $region1 --sku Standard --allocation-method Static -o none
+# Create Bastion subnet in the dmz-vnet
+az network vnet subnet create --name AzureBastionSubnet --resource-group $rg --vnet-name dmz-vnet --address-prefixes 172.16.100.64/26 -o none
+# Deploy bastion in the dmz-vnet
+az network bastion create --location $region1 --name $bastionName --resource-group $rg --vnet-name dmz-vnet --public-ip-address dmz-vnet-bastion-pip --sku Standard --enable-tunneling true --enable-ip-connect true -o none &>/dev/null &
 
 ### Generate connections ###
 # Get all VMs in the resource group

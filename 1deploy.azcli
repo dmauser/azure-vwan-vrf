@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Parameters (make changes based on your requirements)
-region1=eastus2
-region2=eastus2
-region3=eastus2
-region4=eastus2
+region1=westus3
+region2=westus3
+region3=westus3
+region4=westus3
 
 rg=lab-vwan-3p 
 vwanname=vwan-3p
@@ -455,7 +455,7 @@ echo Building VPN connections from VPN Gateways to the respective Branches...
 # get bgp peering and public ip addresses of VPN GW and VWAN to set up connection
 # Branch 1 and Hub1 VPN Gateway variables
 bgp1=$(az network vnet-gateway show -n branch1-vpngw -g $rg --query 'bgpSettings.bgpPeeringAddresses[0].defaultBgpIpAddresses[0]' -o tsv)
-pip1=$()
+pip1=$(az network vnet-gateway show -n branch1-vpngw -g $rg --query 'bgpSettings.bgpPeeringAddresses[0].tunnelIpAddresses[0]' -o tsv)
 vwanh1gwbgp1=$(az network vpn-gateway show -n $hub1name-vpngw -g $rg --query 'bgpSettings.bgpPeeringAddresses[0].defaultBgpIpAddresses[0]' -o tsv)
 vwanh1gwpip1=$(az network vpn-gateway show -n $hub1name-vpngw -g $rg --query 'bgpSettings.bgpPeeringAddresses[0].tunnelIpAddresses[0]' -o tsv)
 vwanh1gwbgp2=$(az network vpn-gateway show -n $hub1name-vpngw -g $rg --query 'bgpSettings.bgpPeeringAddresses[1].defaultBgpIpAddresses[0]' -o tsv)
