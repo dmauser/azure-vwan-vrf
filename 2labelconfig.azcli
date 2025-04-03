@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Parameters (make changes based on your requirements)
-rg=lab-vwan-3pt 
-vwanname=vwan-3pt
+rg=lab-vwan-3p 
+vwanname=vwan-3p
 hub1name=hub1
 hub2name=hub2
 hub3name=hub3

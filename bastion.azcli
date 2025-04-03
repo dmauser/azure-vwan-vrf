@@ -16,3 +16,23 @@ for vm in $vms; do
 done
 
 # Output
+#vmname: branch1VM
+az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --target-ip-address 10.110.0.4 --auth-type password --username azureuser 
+#vmname: branch2VM
+az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --target-ip-address 10.120.0.4 --auth-type password --username azureuser 
+#vmname: dmz-nva
+az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --target-ip-address 172.16.100.4 --auth-type password --username azureuser 
+#vmname: hub3-fw-nva
+az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --target-ip-address 172.16.3.4 --auth-type password --username azureuser 
+#vmname: hub3-spoke
+az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --target-ip-address 172.16.4.4 --auth-type password --username azureuser 
+#vmname: hub4-fw-nva
+az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --target-ip-address 172.16.5.4 --auth-type password --username azureuser 
+#vmname: hub4-spoke
+az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --target-ip-address 172.16.6.4 --auth-type password --username azureuser 
+#vmname: sd-wan-dev
+az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --target-ip-address 172.16.2.4 --auth-type password --username azureuser 
+#vmname: sd-wan-prod
+az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --target-ip-address 172.16.1.4 --auth-type password --username azureuser 
+
+# Public IP DMZ NVA:  4.227.116.58
