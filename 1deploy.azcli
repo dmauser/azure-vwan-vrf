@@ -87,8 +87,8 @@ az network vnet subnet update --id $(az network vnet list -g $rg --query '[?loca
 
 echo Creating VMs in both branches...
 # create a VM in each branch spoke
-az vm create -n branch1VM  -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region1 --subnet main --vnet-name branch1 --admin-username $username --admin-password $password --nsg "" --no-wait
-az vm create -n branch2VM  -g $rg --image Ubuntu2204 --public-ip-sku Standard --size $vmsize -l $region2 --subnet main --vnet-name branch2 --admin-username $username --admin-password $password --nsg "" --no-wait
+az vm create -n branch1VM  -g $rg --image Ubuntu2204 --size $vmsize -l $region1 --subnet main --vnet-name branch1 --admin-username $username --admin-password $password --nsg "" --public-ip-address "" --no-wait
+az vm create -n branch2VM  -g $rg --image Ubuntu2204 --size $vmsize -l $region2 --subnet main --vnet-name branch2 --admin-username $username --admin-password $password --nsg "" --public-ip-address "" --no-wait
 
 echo Creating VPN Gateways in both branches...
 # create pips for VPN GW's in each branch
@@ -414,38 +414,42 @@ fi
 echo Validating vHubs VPN Gateways provisioning...
 #vWAN Hubs VPN Gateway Status
 prState=$(az network vpn-gateway show -g $rg -n $hub1name-vpngw --query provisioningState -o tsv)
-if [[ $prState == 'Failed' ]];
-then
-    echo VPN Gateway is in fail state. Deleting and rebuilding.
-    az network vpn-gateway delete -n $hub1name-vpngw -g $rg
-    az network vpn-gateway create -n $hub1name-vpngw -g $rg --location $region1 --vhub $hub1name --no-wait
-    sleep 5
-else
-    prState=''
-    while [[ $prState != 'Succeeded' ]];
-    do
-        prState=$(az network vpn-gateway show -g $rg -n $hub1name-vpngw --query provisioningState -o tsv)
-        echo $hub1name-vpngw "provisioningState="$prState
+while [[ $prState != 'Succeeded' ]];
+do
+    if [[ $prState == 'Failed' ]];
+    then
+        echo VPN Gateway is in fail state. Deleting and rebuilding.
+        az network vpn-gateway delete -n $hub1name-vpngw -g $rg || { echo "Failed to delete VPN Gateway"; exit 1; }
+        az network vpn-gateway create -n $hub1name-vpngw -g $rg --location $region1 --vhub $hub1name --no-wait || { echo "Failed to create VPN Gateway"; exit 1; }
         sleep 5
-    done
-fi
+    fi
+
+    prState=$(az network vpn-gateway show -g $rg -n $hub1name-vpngw --query provisioningState -o tsv)
+    if [[ -z $prState ]]; then
+        echo "Error fetching provisioning state for $hub1name-vpngw"; exit 1;
+    fi
+    echo $hub1name-vpngw "provisioningState="$prState
+    sleep 5
+done
 
 prState=$(az network vpn-gateway show -g $rg -n $hub2name-vpngw --query provisioningState -o tsv)
-if [[ $prState == 'Failed' ]];
-then
-    echo VPN Gateway is in fail state. Deleting and rebuilding.
-    az network vpn-gateway delete -n $hub2name-vpngw -g $rg
-    az network vpn-gateway create -n $hub2name-vpngw -g $rg --location $region2 --vhub $hub2name --no-wait
-    sleep 5
-else
-    prState=''
-    while [[ $prState != 'Succeeded' ]];
-    do
-        prState=$(az network vpn-gateway show -g $rg -n $hub2name-vpngw --query provisioningState -o tsv)
-        echo $hub2name-vpngw "provisioningState="$prState
+while [[ $prState != 'Succeeded' ]];
+do
+    if [[ $prState == 'Failed' ]];
+    then
+        echo VPN Gateway is in fail state. Deleting and rebuilding.
+        az network vpn-gateway delete -n $hub2name-vpngw -g $rg || { echo "Failed to delete VPN Gateway"; exit 1; }
+        az network vpn-gateway create -n $hub2name-vpngw -g $rg --location $region2 --vhub $hub2name --no-wait || { echo "Failed to create VPN Gateway"; exit 1; }
         sleep 5
-    done
-fi
+    fi
+
+    prState=$(az network vpn-gateway show -g $rg -n $hub2name-vpngw --query provisioningState -o tsv)
+    if [[ -z $prState ]]; then
+        echo "Error fetching provisioning state for $hub2name-vpngw"; exit 1;
+    fi
+    echo $hub2name-vpngw "provisioningState="$prState
+    sleep 5
+done
 
 echo Building VPN connections from VPN Gateways to the respective Branches...
 # get bgp peering and public ip addresses of VPN GW and VWAN to set up connection
