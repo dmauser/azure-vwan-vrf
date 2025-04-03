@@ -3,6 +3,10 @@ bastionName="dmz-vnet-bastion"
 username=azureuser
 password="Msft123Msft123"
 
+### Deploy Bastion ###
+
+
+
 ### Generate connections ###
 # Get all VMs in the resource group
 vms=$(az vm list -g $rg --query "[].{name:name}" -o tsv)
@@ -12,7 +16,7 @@ for vm in $vms; do
         
     # Construct the Bastion SSH command
     echo "#vmname:" $vm
-    echo az network bastion ssh --name "$bastionName" --resource-group "$rg" --target-ip-address "$privateIp" --auth-type "password" --username "$username" --password "$password"
+    echo az network bastion ssh --name "$bastionName" --resource-group "$rg" --target-ip-address "$privateIp" --auth-type "password" --username "$username"
 done
 
 # Output
