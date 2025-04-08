@@ -28,8 +28,12 @@ target_ips=(
 for ip in "${target_ips[@]}"; do
     if is_host_ip "$ip"; then
         echo "Skipping $ip (matches host IP)"
+    echo "----------------------------------------------"        
         continue
     fi
-    echo "$ip"
-    curl --max-time 5 "$ip"
+    echo VM Name: "$(curl -s --max-time 5 "$ip")"
+    echo Testing "$ip"
+    ping -O -c 5 "$ip"
+    echo "----------------------------------------------"
+    echo -e "\n"
 done

@@ -66,5 +66,3 @@ az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --ta
 az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --target-ip-address 172.16.2.4 --auth-type password --username azureuser 
 #vmname: sd-wan-prod
 az network bastion ssh --name dmz-vnet-bastion --resource-group lab-vwan-3p --target-ip-address 172.16.1.4 --auth-type password --username azureuser 
-
-# Public IP DMZ NVA:  4.227.116.58
