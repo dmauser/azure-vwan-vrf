@@ -32,7 +32,7 @@ for ip in "${target_ips[@]}"; do
         continue
     fi
     echo VM Name: "$(curl -s --max-time 5 "$ip")"
-    echo Testing "$ip"
+    echo Testing: "$ip"
     ping -O -c 5 "$ip"
     echo "----------------------------------------------"
     echo -e "\n"
