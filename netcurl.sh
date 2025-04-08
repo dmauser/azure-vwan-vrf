@@ -1,4 +1,3 @@
-#! /bin/bash
 echo "Testing connectivity to various IP addresses using curl"
 echo "--------------------------------------------------"
 echo "10.100.0.4"
