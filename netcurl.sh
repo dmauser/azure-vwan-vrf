@@ -13,7 +13,6 @@ function is_host_ip() {
 
 # List of target IPs
 target_ips=(
-    "10.100.0.4"
     "10.110.0.4"
     "10.120.0.4"
     "172.16.100.4"
