@@ -18,9 +18,9 @@ echo -e
 done
 
 # For connectivity test you can also use curl or traceroute. For example from BranchVM1 or BranchVM2 run:
-curl 10.2.1.4 #expected output spoke5VM
-traceroute 10.2.1.4
-ping 10.2.1.4 -O
+
+curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/nethcurl.sh | bash
+curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/nethping.sh | bash
 
 # 2) Dump VMs route tables:
 for nicname in `az network nic list -g $rg --query [].name -o tsv`
