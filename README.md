@@ -35,13 +35,13 @@ The topology consists of the following components of four environments:
 1. Deploy base lab resources using the following command using Azure Cloud Shell or Azure CLI.
 
 ```bash
-curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/1deploy.azcli | bash
+curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/1deploy.sh | bash
 ```
 
 Alternatively, you can download the script and run it locally which is going to allow you to customize the parameters.
 
 ```bash
-wget -O deploy.sh https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/1deploy.azcli 
+wget -O deploy.sh https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/1deploy.sh 
 chmod +xr deploy.sh
 ./deploy.sh
 ```
@@ -56,7 +56,7 @@ At this point, you have deployed the Virtual WAN with all the components. The ne
 3. Configure labels to segregate traffic between production and development environments as well as between vendor 1 and vendor 2.
 
 ```bash
-curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/2labelconfig.azcli | bash
+curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/2labelconfig.sh | bash
 ```
 
 The network isolation (vrf) goal for this lab is to have separation between prod and dev, vendor1 and vendor2. However, vendor1 and vendor2 can access both prod and dev environments.
