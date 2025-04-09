@@ -50,7 +50,7 @@ chmod +xr deploy.sh
 
 At this point, you have deployed the Virtual WAN with all the components. The next step is to validate the deployment before applying labels for network isolation. The expectation is that all VMs can communicate with each other.
 
- - 4.1 Review the effective routes for the VMs.
+ - 2.1 Review the effective routes for the VMs.
  
     ```bash
     rg=lab-vwan-3p 
@@ -61,7 +61,7 @@ At this point, you have deployed the Virtual WAN with all the components. The ne
     echo -e 
     done
     ```
- - 4.1 Access one or few VMs via Serial Console and validate the connectivity.
+ - 2.1 Access one or few VMs via Serial Console and validate the connectivity.
  
     ```bash
     curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/scripts/netcurl.sh | bash
