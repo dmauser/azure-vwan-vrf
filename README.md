@@ -50,8 +50,22 @@ chmod +xr deploy.sh
 
 At this point, you have deployed the Virtual WAN with all the components. The next step is to validate the deployment before applying labels for network isolation. The expectation is that all VMs can communicate with each other.
 
- - 2.1 Validate connectivity between all VMs.
- - 2.2 Review the effective routes for few VMs.
+ - 4.1 Review the effective routes for the VMs.
+ 
+    ```bash
+    rg=lab-vwan-3p 
+    for nicname in `az network nic list -g $rg --query [].name -o tsv`
+    do 
+    echo -e $nicname effective routes:
+    az network nic show-effective-route-table -g $rg --name $nicname --output table | grep -E "User|VirtualNetworkGateway"
+    echo -e 
+    done
+    ```
+ - 4.1 Access one or few VMs via Serial Console and validate the connectivity.
+ 
+    ```bash
+    curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/scripts/netcurl.sh | bash
+    ```
 
 3. Configure labels to segregate traffic between production and development environments as well as between vendor 1 and vendor 2.
 
@@ -100,7 +114,7 @@ Use the following commands to validate the deployment after applying labels for 
     echo -e 
     done
     ```
- - 4.1 Access few VMs via Serial Console and validate the connectivity.
+ - 4.1 Access one or few VMs via Serial Console and validate the connectivity.
  
     ```bash
     curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/scripts/netcurl.sh | bash
