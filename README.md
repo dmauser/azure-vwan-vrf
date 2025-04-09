@@ -69,29 +69,29 @@ At this point, you have deployed the Virtual WAN with all the components. The ne
 
 3. Configure labels to segregate traffic between production and development environments as well as between vendor 1 and vendor 2.
 
-```bash
-curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/2labelconfig.sh | bash
-```
+    ```bash
+    curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/2labelconfig.sh | bash
+    ```
 
-The network isolation (vrf) goal for this lab is to have separation between prod and dev, vendor1 and vendor2. However, vendor1 and vendor2 can access both prod and dev environments.
+    The network isolation (vrf) goal for this lab is to have separation between prod and dev, vendor1 and vendor2. However, vendor1 and vendor2 can access both prod and dev environments.
 
-After you ran the script above, we will have the following labels on each Virtual Hub:
-- **prod**: Production environment
-- **dev**: Development environment
-- **vendor1**: Vendor 1 environment
-- **vendor2**: Vendor 2 environment
+    After you ran the script above, we will have the following labels on each Virtual Hub:
+    - **prod**: Production environment
+    - **dev**: Development environment
+    - **vendor1**: Vendor 1 environment
+    - **vendor2**: Vendor 2 environment
 
-To achieve this, we will use the following labels:
-
-| Connection | Connected to vHub | Propagation Label | Description |
-|------------|-------------------|-------------------|-------------|
-| sd-wan-prodconn | Hub1 Prod | prod, vendor1, vendor2 | sd-wan-prod vNET advertises its routes to labels Prod, Vendor1 and Vendor 2 |
-| connection-site-branch1 | Hub1 Prod | prod, vendor1, vendor2 | On-premises advertises its routes to labels Prod, Vendor1 and Vendor 2 |
-| sd-wan-devconn | Hub2 Dev | dev, vendor1, vendor2 | sd-wan-dev vNET advertise its routes to labels Dev, Vendor1 and Vendor 2 |
-| connection-site-branch2 | Hub2 Dev | dev, vendor1, vendor2 | On-premises advertises its routes to labels Dev, Vendor1 and Vendor 2 |
-| hub3-fw-vnetconn | Hub3 Vendor1 | vendor1, prod, dev | Hub3 advertises its routes to labels Vendor1 and Vendor 2 |
-| hub4-fw-vnetconn | Hub4 Vendor2 | vendor2, prod, dev | Hub4 advertises its routes to labels Vendor1 and Vendor 2 |
-| dmz-vnetconn | Hub1 Prod | prod | DMZ vnet advertises its routes to label Prod |
+    To achieve this, we will use the following labels:
+    
+    | Connection | Connected to vHub | Propagation Label | Description |
+    |------------|-------------------|-------------------|-------------|
+    | sd-wan-prodconn | Hub1 Prod | prod, vendor1, vendor2 | sd-wan-prod vNET advertises its routes to labels Prod, Vendor1 and Vendor 2 |
+    | connection-site-branch1 | Hub1 Prod | prod, vendor1, vendor2 | On-premises advertises its routes to labels Prod, Vendor1 and Vendor 2 |
+    | sd-wan-devconn | Hub2 Dev | dev, vendor1, vendor2 | sd-wan-dev vNET advertise its routes to labels Dev, Vendor1 and Vendor 2 |
+    | connection-site-branch2 | Hub2 Dev | dev, vendor1, vendor2 | On-premises advertises its routes to labels Dev, Vendor1 and Vendor 2 |
+    | hub3-fw-vnetconn | Hub3 Vendor1 | vendor1, prod, dev | Hub3 advertises its routes to labels Vendor1 and Vendor 2 |
+    | hub4-fw-vnetconn | Hub4 Vendor2 | vendor2, prod, dev | Hub4 advertises its routes to labels Vendor1 and Vendor 2 |
+    | dmz-vnetconn | Hub1 Prod | prod | DMZ vnet advertises its routes to label Prod |
 
 ### Network Diagram after adjusting vnet connections propagation
 
