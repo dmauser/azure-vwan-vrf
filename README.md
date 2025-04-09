@@ -83,8 +83,8 @@ At this point, you have deployed the Virtual WAN with all the components. The ne
 
     To achieve this, we will use the following labels:
     
-    | Connection | Connected to vHub | Propagation Label | Description |
-    |------------|-------------------|-------------------|-------------|
+    | Connection Name | Connected to vHub | Propagation Label | Description |
+    |-----------------|-------------------|-------------------|-------------|
     | sd-wan-prodconn | Hub1 Prod | prod, vendor1, vendor2 | sd-wan-prod vNET advertises its routes to labels Prod, Vendor1 and Vendor 2 |
     | connection-site-branch1 | Hub1 Prod | prod, vendor1, vendor2 | On-premises advertises its routes to labels Prod, Vendor1 and Vendor 2 |
     | sd-wan-devconn | Hub2 Dev | dev, vendor1, vendor2 | sd-wan-dev vNET advertise its routes to labels Dev, Vendor1 and Vendor 2 |
