@@ -87,8 +87,24 @@ It is important to note that after create the lables and adjust the vnet connect
 
 4. Validation after labels for network isolation.
 
- - 4.1 Validate connectivity between all VMs.
- - 4.2 Review the effective routes for the VMs.
+Use the following commands to validate the deployment after applying labels for network isolation. The expectation is that VMs in the production environment can communicate with each other, but they cannot communicate with VMs in the development environment. Similarly, VMs in Vendor 1 can communicate with each other, but they cannot communicate with VMs in Vendor 2.
+
+ - 4.1 Review the effective routes for the VMs.
+ 
+    ```bash
+    rg=lab-vwan-3p 
+    for nicname in `az network nic list -g $rg --query [].name -o tsv`
+    do 
+    echo -e $nicname effective routes:
+    az network nic show-effective-route-table -g $rg --name $nicname --output table | grep -E "User|VirtualNetworkGateway"
+    echo -e 
+    done
+    ```
+ - 4.1 Access few VMs via Serial Console and validate the connectivity.
+ 
+    ```bash
+    curl -s https://raw.githubusercontent.com/dmauser/azure-vwan-vrf/refs/heads/main/scripts/netcurl.sh | bash
+    ```
 
 ### Conclusion
 
