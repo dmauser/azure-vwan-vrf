@@ -8,7 +8,8 @@ This lab provides a step-by-step guide to deploying a Virtual WAN with labels, e
     - Here are some resources to get you started:
       - [Azure Virtual WAN Overview](https://learn.microsoft.com/en-us/azure/virtual-wan/virtual-wan-about)
       - [About virtual Hub routing](https://learn.microsoft.com/en-us/azure/virtual-wan/about-virtual-hub-routing)
-- It is encouraged you to review this create article from Jose Moreno that explains the concepts behind the lab: [VRFs and Virtual WAN](https://blog.cloudtrooper.net/2022/12/19/vrfs-and-virtual-wan/)
+
+- For a deeper understanding of the concepts behind this lab, consider reviewing this insightful article by Jose Moreno: [VRFs and Virtual WAN](https://blog.cloudtrooper.net/2022/12/19/vrfs-and-virtual-wan/).
 
 ### Network topology
 
