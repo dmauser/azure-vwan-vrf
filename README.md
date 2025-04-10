@@ -27,10 +27,10 @@ The topology consists of the following components of four environments:
 
 ### Important Notes
 
-- The lab is designed to be run in a single Azure region (East US) for simplicity. However, you can modify the deployment script to use different regions if needed.
+- The lab is designed to be run in a single Azure region (West US3) for simplicity. However, you can modify the deployment script to use different regions if needed.
 - The lab uses Azure CLI commands to deploy resources. Ensure you have the Azure CLI installed and configured on your machine or use the Azure Cloud Shell.
 - The inspection is done outside of the Virtual WAN hubs. That is necessary because turning Virtual WAN Hub as secured remove the ability to use labels. Therefore, the inspection is done in each vendor fw-vnet.
-
+- All VMs use Linux Ubuntu 22.04 LTS as the base image. The NVAs are configure to use IP forwarding and iptables to allow traffic inspection. 
 
 ### Lab Steps
 
