@@ -24,6 +24,7 @@ az network vnet subnet create --name AzureBastionSubnet --resource-group $rg --v
 az network bastion create --location $region1 --name $bastionName --resource-group $rg --vnet-name dmz-vnet --public-ip-address dmz-vnet-bastion-pip --sku Standard --enable-tunneling true --enable-ip-connect true -o none &>/dev/null &
 
 # Check if Bastion is deployed
+sleep 5
 while true; do
     status=$(az network bastion show --name $bastionName --resource-group $rg --query provisioningState -o tsv)
     if [ "$status" == "Succeeded" ]; then
